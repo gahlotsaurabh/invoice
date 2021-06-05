@@ -1,0 +1,30 @@
+[
+  {
+    "#": 1,
+    "Name": "text book",
+    "Rate": 100,
+    "Quantity": 10,
+    "Basic Cost": 0,
+    "Discount (%)": 2,
+    "Discount Amt": 2,
+    "Final Basic Cost": 98,
+    "Taxes (%)": 10,
+    "Tax Amt": 9.8,
+    "Total Cost": 107.8,
+    "Tools": "Delete"
+  },
+  {
+    "#": 2,
+    "Name": "math book",
+    "Rate": 5,
+    "Quantity": 10,
+    "Basic Cost": 50,
+    "Discount (%)": 10,
+    "Discount Amt": 5,
+    "Final Basic Cost": 45,
+    "Taxes (%)": 10,
+    "Tax Amt": 4.5,
+    "Total Cost": 49.5,
+    "Tools": "Delete"
+  }
+]
