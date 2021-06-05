@@ -1,106 +1,223 @@
-import React, { useState } from "react";
+import React from "react";
 import "./style.css";
-import CellComponent from "./cell";
+import {
+  calBasicCost,
+  calDiscountAmount,
+  calFinalBC,
+  calTaxAmt,
+  calTotalCost,
+} from "../utils/index";
 
 export default function RowComponent({
   data,
-  heading,
+  onInputChange,
+  saveData,
+  addNew,
+  deleteRow,
   footing,
-  yellowHeading,
 }) {
-  const header = heading.map((t) => (
-    <th className="tHeader" key={t}>
+  const heading = [
+    "#",
+    "Name",
+    "Rate",
+    "Quantity",
+    "Basic Cost",
+    "Discount (%)",
+    "Discount Amt",
+    "Final Basic Cost",
+    "Taxes (%)",
+    "Tax Amt",
+    "Total Cost",
+    "Tools",
+  ];
+
+  const yellowHeading = [
+    "",
+    "",
+    "",
+    "",
+    "rate*quantity",
+    "",
+    "(basiccost*discount)/100",
+    "basiccost-discount",
+    "",
+    "(finalcost*10)/100",
+    "FinalBasicCost+TaxAmout]",
+    "",
+  ];
+
+  const header = heading.map((t, index) => (
+    <th className="tHeader" key={index}>
       {t}
     </th>
   ));
-  const yellowHeader = yellowHeading.map((t) => (
-    <th class="yellowHeading" key={t}>
+  const yellowHeader = yellowHeading.map((t, index) => (
+    <th className="yellowHeading" key={index}>
       {t}
     </th>
   ));
   const rows = data.map((key, index) => {
     return (
-      <tr key={key["#"] + key["Name"]}>
-        <td key={index + String(key["#"])}>
-          <CellComponent value={key["#"]} size={String(key["#"]).length} />
+      <tr key={index + "#"}>
+        <td>
+          <input value={key["#"]} size={String(key["#"]).length} />
         </td>
-        <td key={index + key["Name"]}>
-          <CellComponent
-            key={index + key["Name"]}
+        <td key={index + "Name"}>
+          <input
+            data-row-id={key["#"]}
+            data-row-index={index}
+            data-col-name={"Name"}
             value={key["Name"]}
-            size={key["Name"].length}
+            size={10}
+            onChange={onInputChange}
           />
         </td>
-        <td key={index + String(key["Rate"])}>
-          <CellComponent value={key["Rate"]} size={"Rate".length} />
+        <td key={index + "Rate"}>
+          <input
+            data-row-id={key["#"]}
+            data-row-index={index}
+            data-col-name={"Rate"}
+            data-type={"num"}
+            value={key["Rate"]}
+            size={"Rate".length}
+            onChange={onInputChange}
+          />
         </td>
-        <td key={index + key["Name"] + String(key["Quantity"])}>
-          <CellComponent value={key["Quantity"]} size={"Quantity".length} />
+        <td key={index + "Quantity"}>
+          <input
+            data-row-id={key["#"]}
+            data-row-index={index}
+            data-col-name={"Quantity"}
+            value={key["Quantity"]}
+            size={"Quantity".length}
+            onChange={onInputChange}
+          />
         </td>
-        <td key={index + String(key["Basic Cost"])}>
-          <CellComponent
-            value={key["Basic Cost"]}
+        <td key={index + "Basic Cost"}>
+          <input
+            value={calBasicCost(
+              parseInt(key["Rate"]),
+              parseInt(key["Quantity"])
+            )}
             size={"Basic Cost".length}
-            disabled={true}
-            classy={"disabledInput"}
+            readOnly
+            className="disabledInput"
           />
         </td>
-        <td key={index + String(key["Discount (%)"]) + key["Name"]}>
-          <CellComponent
+        <td key={index + "Discount (%)"}>
+          <input
+            data-row-id={key["#"]}
+            data-row-index={index}
+            data-col-name={"Discount (%)"}
             value={key["Discount (%)"]}
             size={"Discount (%)".length}
+            onChange={onInputChange}
           />
         </td>
-        <td key={index + String(key["Discount Amt"])}>
-          <CellComponent
-            value={key["Discount Amt"]}
+        <td key={index + "Discount Amt"}>
+          <input
+            value={calDiscountAmount(
+              calBasicCost(parseInt(key["Rate"]), parseInt(key["Quantity"])),
+              key["Discount (%)"]
+            )}
             size={"Discount Amt".length}
-            classy={"disabledInput"}
-            disabled={true}
+            className="disabledInput"
+            readOnly
           />
         </td>
-        <td key={index + String(key["Final Basic Cost"])}>
-          <CellComponent
-            value={key["Final Basic Cost"]}
+        <td key={index + "Final Basic Cost"}>
+          <input
+            value={calFinalBC(
+              calBasicCost(parseInt(key["Rate"]), parseInt(key["Quantity"])),
+              calDiscountAmount(
+                calBasicCost(parseInt(key["Rate"]), parseInt(key["Quantity"])),
+                key["Discount (%)"]
+              )
+            )}
             size={"Final Basic Cost".length}
-            classy={"disabledInput"}
-            disabled={true}
+            className="disabledInput"
+            readOnly
           />
         </td>
-        <td key={index + String(key["Taxes (%)"])}>
-          <CellComponent value={key["Taxes (%)"]} size={"Taxes (%)".length} />
+        <td key={index + "Taxes (%)"}>
+          <input
+            data-row-id={key["#"]}
+            data-row-index={index}
+            data-col-name={"Taxes (%)"}
+            value={key["Taxes (%)"]}
+            size={"Taxes (%)".length}
+            onChange={onInputChange}
+          />
         </td>
-        <td key={index + String(key["Tax Amt"])}>
-          <CellComponent
-            value={key["Tax Amt"]}
+        <td key={index + "Tax Amt"}>
+          <input
+            value={calTaxAmt(
+              calFinalBC(
+                calBasicCost(parseInt(key["Rate"]), parseInt(key["Quantity"])),
+                calDiscountAmount(
+                  calBasicCost(
+                    parseInt(key["Rate"]),
+                    parseInt(key["Quantity"])
+                  ),
+                  key["Discount (%)"]
+                )
+              )
+            )}
             size={"Total Final basic cost".length}
-            classy={"disabledInput"}
-            disabled={true}
+            className="disabledInput"
+            readOnly
           />
         </td>
-        <td key={index + String(key["Total Cost"])}>
-          <CellComponent
-            value={key["Total Cost"]}
+        <td key={index + "Total Cost"}>
+          <input
+            value={calTotalCost(
+              calFinalBC(
+                calBasicCost(parseInt(key["Rate"]), parseInt(key["Quantity"])),
+                calDiscountAmount(
+                  calBasicCost(
+                    parseInt(key["Rate"]),
+                    parseInt(key["Quantity"])
+                  ),
+                  key["Discount (%)"]
+                )
+              ),
+              calTaxAmt(
+                calFinalBC(
+                  calBasicCost(
+                    parseInt(key["Rate"]),
+                    parseInt(key["Quantity"])
+                  ),
+                  calDiscountAmount(
+                    calBasicCost(
+                      parseInt(key["Rate"]),
+                      parseInt(key["Quantity"])
+                    ),
+                    key["Discount (%)"]
+                  )
+                )
+              )
+            )}
             size={"Total Cost".length}
-            classy={"disabledInput"}
-            disabled={true}
+            className="disabledInput"
+            readOnly
           />
         </td>
         <td key={index + String(key["Tools"])}>
-          <CellComponent
+          <input
+            onClick={deleteRow}
+            data-row-id={key["#"]}
+            readOnly
             value={key["Tools"]}
             size={"Tools".length}
-            // classy={"disabledInput"}
-            disabled={true}
           />
         </td>
       </tr>
     );
   });
 
-  const footer = footing.map((f) => {
+  const footer = footing.map((f, index) => {
     return (
-      <tr className="" key={f[0]}>
+      <tr className="" key={index}>
         <td></td>
         <td></td>
         <td></td>
@@ -110,10 +227,12 @@ export default function RowComponent({
         <td></td>
         <td></td>
         <td></td>
-        <td key={f[0]}>
+        <td key={index}>
           {f[0] ? (
-            <CellComponent
+            <input
+              className="tHeader "
               value={f[0]}
+              readOnly
               size={"Total Final basic cost".length}
             />
           ) : (
@@ -121,15 +240,25 @@ export default function RowComponent({
           )}
         </td>
         {f[0] ? (
-          <CellComponent value={f[1]} size={"Total Cost".length} />
+          <td>
+            <input
+              className="disabledInput"
+              value={f[1]}
+              size={"Total Cost".length}
+              readOnly
+            />
+          </td>
         ) : (
-          <input
-            disabled
-            style={{
-              borderWidth: "0px",
-            }}
-            size={"Total cost".length}
-          ></input>
+          <td>
+            <input
+              // disabled
+              readOnly
+              style={{
+                borderWidth: "0px",
+              }}
+              size={"Total cost".length}
+            />
+          </td>
         )}
         <td></td>
       </tr>
@@ -148,10 +277,14 @@ export default function RowComponent({
       <td></td>
       <td></td>
       <td>
-        <button className="addbtn">Add new Item</button>
+        <button onClick={addNew} className="addbtn">
+          Add new Item
+        </button>
       </td>
       <td>
-        <button className="savebtn">Save</button>
+        <button onClick={saveData} className="savebtn">
+          Save
+        </button>
       </td>
       <td></td>
     </tr>
@@ -160,11 +293,11 @@ export default function RowComponent({
   return (
     <>
       <thead>
-        {/* {yellowHeader} */}
+        {yellowHeader}
         <tr className="table-header">{header}</tr>
       </thead>
       <tbody>
-        {data.length ? rows : <>No data</>}
+        {data.length ? rows : <></>}
         {footer}
         {saveBtn}
       </tbody>

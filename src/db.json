@@ -2,9 +2,9 @@
   {
     "#": 1,
     "Name": "text book",
-    "Rate": 100,
+    "Rate": 10,
     "Quantity": 10,
-    "Basic Cost": 0,
+    "Basic Cost": 10,
     "Discount (%)": 2,
     "Discount Amt": 2,
     "Final Basic Cost": 98,
