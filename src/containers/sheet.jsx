@@ -8,7 +8,22 @@ import {
   calTotalCost,
   calTotalBasicCost,
 } from "../utils/index";
-const persistantData = JSON.parse(localStorage.getItem("data")) || [];
+const persistantData = JSON.parse(localStorage.getItem("data")) || [
+  {
+    "#": newArr.length,
+    Name: "",
+    Rate: 0,
+    Quantity: 0,
+    "Basic Cost": 0,
+    "Discount (%)": 0,
+    "Discount Amt": 0,
+    "Final Basic Cost": 0,
+    "Taxes (%)": 0,
+    "Tax Amt": 0,
+    "Total Cost": 0,
+    Tools: "Delete",
+  },
+];
 
 export default function SheetContainer() {
   const [data, setData] = useState(persistantData);
