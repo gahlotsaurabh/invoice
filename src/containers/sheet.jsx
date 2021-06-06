@@ -10,7 +10,7 @@ import {
 } from "../utils/index";
 const persistantData = JSON.parse(localStorage.getItem("data")) || [
   {
-    "#": newArr.length,
+    "#": 0,
     Name: "",
     Rate: 0,
     Quantity: 0,
